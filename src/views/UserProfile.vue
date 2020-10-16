@@ -2,21 +2,22 @@
     <div class="user-profile">
         <div class="user-profile_sidebar">
             <div class="user-profile_user-panel">
-                <h1 class="user-profile_username">@{{user.username}}</h1>
-                <div class="user-profile_admin-badge" v-if="user.isAdmin">
+                <h1 class="user-profile_username">@{{state.user.username}}</h1>
+                <!--<h2>{{userId}}</h2>-->
+                <div class="user-profile_admin-badge" v-if="state.user.isAdmin">
                     Admin
                 </div>
                 <div class="user-profile_follower-count">
-                    <p><strong>Followers:</strong> 0</p>
+                    <p><strong>Followers:</strong> {{state.followers}}</p>
                 </div>
             </div>
             <CreateTwootPanel @add-twoot="addTwoot"/>
         </div>
         <div class="user-profile_twoots-wrapper">
             <TwootItem
-                v-for="twoot in user.twoots" 
+                v-for="twoot in state.user.twoots" 
                 :key="twoot.id" 
-                :username="user.username" 
+                :username="state.user.username" 
                 :twoot="twoot" 
             />
         </div>
@@ -24,13 +25,35 @@
 </template>
 
 <script>
-import TwootItem from "./TwootItem"
-import CreateTwootPanel from "./CreateTwootPanel"
+import {reactive, computed} from 'vue'
+import {useRoute} from 'vue-router'
+import {users} from '../assets/users'
+import TwootItem from "../components/TwootItem"
+import CreateTwootPanel from "../components/CreateTwootPanel"
 
 export default {
   name: 'UserProfile',
   components: {CreateTwootPanel, TwootItem},
-  data(){
+  setup(){
+    const route = useRoute()
+    const userId = computed(()=>route.params.userId )
+    const state = reactive({
+      followers: 0,
+      user: users[userId.value - 1] || users[0]
+    })
+
+    function addTwoot(twoot){
+      state.user.twoots.unshift({id: state.user.twoots.length +1, content: twoot})
+    }
+
+    return{
+      state,
+      addTwoot,
+      userId
+    }
+  },
+
+  /* data(){
     return{
         newTwootContent: '',
         selectedTwootType: 'instant',
@@ -38,7 +61,7 @@ export default {
             { value: 'draft', name: 'Draft'},
             { value: 'instant', name: 'Instant'}
         ],
-      //followers: 0,
+      followers: 0,
       user:{
         id: 1,
         username: 'vernaschwartz',
@@ -51,8 +74,8 @@ export default {
             { id: 2, content: "Don't forget to subscribe!"}
         ]
       }
-    }
-  },
+    } 
+  },*/
   //these watch computed methods and mounted can go in any order
 
   //this watches a data point and when it changes you can run a function
@@ -73,10 +96,10 @@ export default {
     }
   }, */
   //used for changing things like buttons and such
-  methods: {
+  /*methods: {
       addTwoot(twoot){
           this.user.twoots.unshift({id:this.user.twoots.length +1, content: twoot})
-      }
+      }*/
     /*followUser(){
       this.followers++
     },
@@ -92,7 +115,7 @@ export default {
             this.newTwootContent = ''
         }
     }*/
-  },
+  //}
 
   /*this function runs when the app loads here it is adding one follower
   because it is running the followUser function which adds a follower*/

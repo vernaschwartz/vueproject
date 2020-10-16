@@ -1,13 +1,18 @@
 //Global Styles
-
+$pink:#ff9999;
 body{
     margin: 0px;
+}
+
+a{
+    text-decoration: none;
+    color: inherit; 
 }
 
 button{
     max-width: 60px;
     height:30px;
-    background-color:#ff9999;
+    background-color:$pink;
     color: white;
     font-size: 14px;
     border: .5px solid rgba(255,153,153, 0.50);
