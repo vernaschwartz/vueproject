@@ -12,7 +12,7 @@ app.use(serveStatic( __dirname +'/dist'));
 app.use(history());
 
 //makes heroku to use this port
-app.listen(process.env.PORT || 3000);
+//app.listen(process.env.PORT || 3000);
 
 
 
