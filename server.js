@@ -7,7 +7,7 @@ const app= express();
 
 //forces users to use the HTTPS version of site
 app.use(enforce.HTTPS({trustProtoHeader: true}));
-app.use(serveStatic( _dirname +'/dist'));
+app.use(serveStatic( __dirname +'/dist'));
 //helps prevent router history issues
 app.use(history());
 
